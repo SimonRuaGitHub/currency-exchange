@@ -10,15 +10,15 @@ func main() {
 
 	fmt.Println("------ Currency conversion agent -----")
 
-	for _, exchangeHouse := range webmapping.ExchangeHouses {
+	for name, url := range webmapping.ExchangeHouses {
 
-		switch exchangeHouse.Name {
+		switch name {
 
 		case webmapping.Globocambios:
 			reqExchange := interactions.ExchangeGlobocambios{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
-					Url:      exchangeHouse.Url,
+					Url:      url,
 				},
 			}
 
@@ -27,7 +27,7 @@ func main() {
 			reqExchange := interactions.ExchangeMaxmoney{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
-					Url:      exchangeHouse.Url,
+					Url:      url,
 				},
 			}
 
@@ -37,7 +37,7 @@ func main() {
 			reqExchange := interactions.ExchangeUnicambios{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
-					Url:      exchangeHouse.Url,
+					Url:      url,
 				},
 			}
 
@@ -47,7 +47,7 @@ func main() {
 			reqExchange := interactions.ExchangeHomeCambios{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
-					Url:      exchangeHouse.Url,
+					Url:      url,
 				},
 			}
 
@@ -57,7 +57,7 @@ func main() {
 			reqExchange := interactions.ExchangeNutifinanzas{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
-					Url:      exchangeHouse.Url,
+					Url:      url,
 				},
 			}
 
