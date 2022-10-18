@@ -45,7 +45,8 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 
 	var resultExchange = calculateConversion(currenciesUnicambios, reqExchange)
 
-	fmt.Println("Result Exchange Unicambios: ", resultExchange)
+	fmt.Printf("Result Exchange Unicambios:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
+		resultExchange.Exchange.Currency, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
 
 	return resultExchange
 }
