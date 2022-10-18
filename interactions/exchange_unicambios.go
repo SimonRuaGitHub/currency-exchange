@@ -1,12 +1,14 @@
 package interactions
 
 import (
+	utils "currency-exchange-medellin/utils"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/gocolly/colly"
 )
+
+const scrappingTimeout = 120 * time.Second
 
 const (
 	currenciesRows    = "tr"
@@ -29,12 +31,24 @@ type currencyUnicambios struct {
 }
 
 func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
-	fmt.Printf("Request Currency: %s - Value: %f - OperationType: %s",
+	fmt.Printf("Request Currency: %s - Value: %f - OperationType: %s \n",
 		reqExchange.Exchange.Currency, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
+	var scrapper = buildScrapper(scrappingTimeout)
+
+	scrapCurrenciesInfo(scrapper)
+
+	scrapper.Visit(reqExchange.Url)
+
+	return ResultExchange{
+		Exchange{"USD", 4135.43, "purshace"},
+	}
+}
+
+func buildScrapper(timeout time.Duration) *colly.Collector {
 	scrapper := colly.NewCollector()
 
-	scrapper.SetRequestTimeout(120 * time.Second)
+	scrapper.SetRequestTimeout(timeout)
 
 	scrapper.OnRequest(func(request *colly.Request) {
 		fmt.Println("Visting web page: " + request.URL.String())
@@ -52,13 +66,7 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 		fmt.Println("Finished scrapping page")
 	})
 
-	scrapCurrenciesInfo(scrapper)
-
-	scrapper.Visit(reqExchange.Url)
-
-	return ResultExchange{
-		Exchange{"USD", 4135.43, "purshace"},
-	}
+	return scrapper
 }
 
 func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
@@ -75,8 +83,8 @@ func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
 
 					targetValueToBuy := row.ChildText("td:nth-child(3)")
 					targetValueOnSale := row.ChildText("td:nth-child(4)")
-					valueToBuy, _ := fromStringToFloat(targetValueToBuy)
-					valueOnSale, _ := fromStringToFloat(targetValueOnSale)
+					valueToBuy, _ := utils.FromStringToFloat(targetValueToBuy)
+					valueOnSale, _ := utils.FromStringToFloat(targetValueOnSale)
 
 					currencyUnicambio := currencyUnicambios{
 						description: row.ChildText("td:nth-child(2)"),
@@ -93,16 +101,4 @@ func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
 	}
 
 	return currenciesUnicambios
-}
-
-func fromStringToFloat(value string) (parsedValue float64, err error) {
-
-	floatValue, err := strconv.ParseFloat(value, 64)
-
-	if err != nil {
-		fmt.Errorf("Error when parsing from string to float64", err)
-		return 0.0, err
-	} else {
-		return floatValue, nil
-	}
 }

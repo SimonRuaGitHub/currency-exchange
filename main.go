@@ -1,8 +1,8 @@
 package main
 
 import (
+	exchangemed "currency-exchange-medellin/exchange-med"
 	interactions "currency-exchange-medellin/interactions"
-	mappingmed "currency-exchange-medellin/webmapping-med"
 	"fmt"
 )
 
@@ -10,11 +10,11 @@ func main() {
 
 	fmt.Println("------ Currency Conversion Agent in Action -----")
 
-	for name, url := range mappingmed.ExchangeHouses {
+	for name, url := range exchangemed.ExchangeHouses {
 
 		switch name {
 
-		case mappingmed.Globocambios:
+		case exchangemed.Globocambios:
 			reqExchange := interactions.ExchangeGlobocambios{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
@@ -23,7 +23,7 @@ func main() {
 			}
 
 			interactions.SelectCurrencyExchange(&reqExchange)
-		case mappingmed.Moneymax:
+		case exchangemed.Moneymax:
 			reqExchange := interactions.ExchangeMaxmoney{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
@@ -33,7 +33,7 @@ func main() {
 
 			interactions.SelectCurrencyExchange(&reqExchange)
 
-		case mappingmed.Unicambios:
+		case exchangemed.Unicambios:
 			reqExchange := interactions.ExchangeUnicambios{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
@@ -43,7 +43,7 @@ func main() {
 
 			interactions.SelectCurrencyExchange(&reqExchange)
 
-		case mappingmed.Homecambios:
+		case exchangemed.Homecambios:
 			reqExchange := interactions.ExchangeHomeCambios{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
@@ -53,7 +53,7 @@ func main() {
 
 			interactions.SelectCurrencyExchange(&reqExchange)
 
-		case mappingmed.Nutifinanzas:
+		case exchangemed.Nutifinanzas:
 			reqExchange := interactions.ExchangeNutifinanzas{
 				RequestExchange: interactions.RequestExchange{
 					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},

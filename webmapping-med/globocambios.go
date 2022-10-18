@@ -1,3 +1,0 @@
-package webmappingmed
-
-const ()
