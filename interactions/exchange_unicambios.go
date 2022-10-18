@@ -9,10 +9,14 @@ import (
 )
 
 const (
-	currenciesTable   = "section.premium-tabs-section table#supsystic-table-12 tbody"
 	currenciesRows    = "tr"
 	currenciesColumns = "td"
 )
+
+var currenciesTables = map[string]string{
+	"tableLeftSide":  "section.premium-tabs-section table#supsystic-table-12 tbody",
+	"tableRightSide": "section.premium-tabs-section table#supsystic-table-11 tbody",
+}
 
 type ExchangeUnicambios struct {
 	RequestExchange
@@ -40,28 +44,6 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 		fmt.Println("Got response from page")
 	})
 
-	currenciesUnicambios := make([]currencyUnicambios, 0)
-
-	scrapper.OnHTML(currenciesTable, func(tableHtml *colly.HTMLElement) {
-		tableHtml.ForEach(currenciesRows, func(i int, row *colly.HTMLElement) {
-			if row.ChildText("td:nth-child(2)") != "" {
-
-				valueToBuy, _ := fromStringToFloat("td:nth-child(3)")
-				valueOnSale, _ := fromStringToFloat("td:nth-child(4)")
-
-				currencyUnicambio := currencyUnicambios{
-					description: row.ChildText("td:nth-child(2)"),
-					valueToBuy:  valueToBuy,
-					valueOnSale: valueOnSale,
-				}
-
-				fmt.Println("Currency scrapped: ", currencyUnicambio)
-
-				currenciesUnicambios = append(currenciesUnicambios, currencyUnicambio)
-			}
-		})
-	})
-
 	scrapper.OnError(func(r *colly.Response, e error) {
 		fmt.Println("Error when visiting page: ", e)
 	})
@@ -70,11 +52,47 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 		fmt.Println("Finished scrapping page")
 	})
 
+	scrapCurrenciesInfo(scrapper)
+
 	scrapper.Visit(reqExchange.Url)
 
 	return ResultExchange{
 		Exchange{"USD", 4135.43, "purshace"},
 	}
+}
+
+func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
+
+	currenciesUnicambios := make([]currencyUnicambios, 0)
+
+	for tableSide, table := range currenciesTables {
+
+		fmt.Println("Scrapping currencies from table: ", tableSide)
+
+		scrapper.OnHTML(table, func(tableHtml *colly.HTMLElement) {
+			tableHtml.ForEach(currenciesRows, func(i int, row *colly.HTMLElement) {
+				if row.ChildText("td:nth-child(2)") != "" {
+
+					targetValueToBuy := row.ChildText("td:nth-child(3)")
+					targetValueOnSale := row.ChildText("td:nth-child(4)")
+					valueToBuy, _ := fromStringToFloat(targetValueToBuy)
+					valueOnSale, _ := fromStringToFloat(targetValueOnSale)
+
+					currencyUnicambio := currencyUnicambios{
+						description: row.ChildText("td:nth-child(2)"),
+						valueToBuy:  valueToBuy,
+						valueOnSale: valueOnSale,
+					}
+
+					fmt.Println("Currency scrapped: ", currencyUnicambio)
+
+					currenciesUnicambios = append(currenciesUnicambios, currencyUnicambio)
+				}
+			})
+		})
+	}
+
+	return currenciesUnicambios
 }
 
 func fromStringToFloat(value string) (parsedValue float64, err error) {
