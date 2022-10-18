@@ -1,8 +1,8 @@
 package main
 
 import (
-	exchangemed "currency-exchange-medellin/exchange-med"
-	interactions "currency-exchange-medellin/interactions"
+	agent "currency-exchange-medellin/agentexchange"
+	exchangemed "currency-exchange-medellin/exchangemed"
 	"fmt"
 )
 
@@ -15,53 +15,53 @@ func main() {
 		switch name {
 
 		case exchangemed.Globocambios:
-			reqExchange := interactions.ExchangeGlobocambios{
-				RequestExchange: interactions.RequestExchange{
-					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+			reqExchange := agent.ExchangeGlobocambios{
+				RequestExchange: agent.RequestExchange{
+					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
 
-			interactions.SelectCurrencyExchange(&reqExchange)
+			agent.SelectCurrencyExchange(&reqExchange)
 		case exchangemed.Moneymax:
-			reqExchange := interactions.ExchangeMaxmoney{
-				RequestExchange: interactions.RequestExchange{
-					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+			reqExchange := agent.ExchangeMaxmoney{
+				RequestExchange: agent.RequestExchange{
+					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
 
-			interactions.SelectCurrencyExchange(&reqExchange)
+			agent.SelectCurrencyExchange(&reqExchange)
 
 		case exchangemed.Unicambios:
-			reqExchange := interactions.ExchangeUnicambios{
-				RequestExchange: interactions.RequestExchange{
-					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+			reqExchange := agent.ExchangeUnicambios{
+				RequestExchange: agent.RequestExchange{
+					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
 
-			interactions.SelectCurrencyExchange(&reqExchange)
+			agent.SelectCurrencyExchange(&reqExchange)
 
 		case exchangemed.Homecambios:
-			reqExchange := interactions.ExchangeHomeCambios{
-				RequestExchange: interactions.RequestExchange{
-					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+			reqExchange := agent.ExchangeHomeCambios{
+				RequestExchange: agent.RequestExchange{
+					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
 
-			interactions.SelectCurrencyExchange(&reqExchange)
+			agent.SelectCurrencyExchange(&reqExchange)
 
 		case exchangemed.Nutifinanzas:
-			reqExchange := interactions.ExchangeNutifinanzas{
-				RequestExchange: interactions.RequestExchange{
-					Exchange: interactions.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+			reqExchange := agent.ExchangeNutifinanzas{
+				RequestExchange: agent.RequestExchange{
+					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
 
-			interactions.SelectCurrencyExchange(&reqExchange)
+			agent.SelectCurrencyExchange(&reqExchange)
 
 		}
 	}

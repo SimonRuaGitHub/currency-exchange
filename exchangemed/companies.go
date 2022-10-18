@@ -1,4 +1,4 @@
-package webmappingmed
+package exchangemed
 
 const (
 	Globocambios = "Globocambios"
