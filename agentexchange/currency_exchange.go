@@ -11,6 +11,7 @@ type RequestExchange struct {
 
 type ResultExchange struct {
 	Exchange
+	ValueConvertion float64
 }
 
 type Exchange struct {

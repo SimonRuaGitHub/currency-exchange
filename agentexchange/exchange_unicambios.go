@@ -3,6 +3,7 @@ package interactions
 import (
 	utils "currency-exchange-medellin/utils"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gocolly/colly"
@@ -36,12 +37,41 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 
 	var scrapper = buildScrapper(scrappingTimeout)
 
-	scrapCurrenciesInfo(scrapper)
+	currenciesUnicambios := make([]currencyUnicambios, 0)
+
+	scrapCurrenciesInfo(scrapper, &currenciesUnicambios)
 
 	scrapper.Visit(reqExchange.Url)
 
+	var resultExchange = calculateConversion(currenciesUnicambios, reqExchange)
+
+	fmt.Println("Result Exchange Unicambios: ", resultExchange)
+
+	return resultExchange
+}
+
+func calculateConversion(currenciesInfo []currencyUnicambios, reqExchange *ExchangeUnicambios) ResultExchange {
+	var valueConvertion float64 = 0.0
+	var valueOperation float64 = 0.0
+
+	for _, currencyInfo := range currenciesInfo {
+		if strings.Contains(currencyInfo.description, reqExchange.Exchange.Currency) {
+			fmt.Println("Found currency: ", currencyInfo.description)
+
+			if reqExchange.Exchange.OperationType == "purchase" {
+				valueConvertion = currencyInfo.valueToBuy * reqExchange.Exchange.Value
+				valueOperation = currencyInfo.valueToBuy
+			} else {
+				valueConvertion = currencyInfo.valueOnSale * reqExchange.Exchange.Value
+				valueOperation = currencyInfo.valueOnSale
+			}
+			break
+		}
+	}
+
 	return ResultExchange{
-		Exchange{"USD", 4135.43, "purshace"},
+		Exchange{reqExchange.Currency, valueOperation, reqExchange.OperationType},
+		valueConvertion,
 	}
 }
 
@@ -69,9 +99,7 @@ func buildScrapper(timeout time.Duration) *colly.Collector {
 	return scrapper
 }
 
-func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
-
-	currenciesUnicambios := make([]currencyUnicambios, 0)
+func scrapCurrenciesInfo(scrapper *colly.Collector, currenciesUnicambios *[]currencyUnicambios) {
 
 	for tableSide, table := range currenciesTables {
 
@@ -81,8 +109,8 @@ func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
 			tableHtml.ForEach(currenciesRows, func(i int, row *colly.HTMLElement) {
 				if row.ChildText("td:nth-child(2)") != "" {
 
-					targetValueToBuy := row.ChildText("td:nth-child(3)")
-					targetValueOnSale := row.ChildText("td:nth-child(4)")
+					targetValueToBuy := strings.Replace(row.ChildText("td:nth-child(3)"), ".", "", -1)
+					targetValueOnSale := strings.Replace(row.ChildText("td:nth-child(4)"), ".", "", -1)
 					valueToBuy, _ := utils.FromStringToFloat(targetValueToBuy)
 					valueOnSale, _ := utils.FromStringToFloat(targetValueOnSale)
 
@@ -94,11 +122,9 @@ func scrapCurrenciesInfo(scrapper *colly.Collector) []currencyUnicambios {
 
 					fmt.Println("Currency scrapped: ", currencyUnicambio)
 
-					currenciesUnicambios = append(currenciesUnicambios, currencyUnicambio)
+					*currenciesUnicambios = append(*currenciesUnicambios, currencyUnicambio)
 				}
 			})
 		})
 	}
-
-	return currenciesUnicambios
 }
