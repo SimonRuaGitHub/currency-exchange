@@ -1,6 +1,7 @@
 package interactions
 
 import (
+	scraping "currency-exchange-medellin/scraping"
 	utils "currency-exchange-medellin/utils"
 	"fmt"
 	"strings"
@@ -12,8 +13,7 @@ import (
 const scrappingTimeout = 120 * time.Second
 
 const (
-	currenciesRows    = "tr"
-	currenciesColumns = "td"
+	currenciesRows = "tr"
 )
 
 var currenciesTables = map[string]string{
@@ -32,16 +32,19 @@ type currencyUnicambios struct {
 }
 
 func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
+
+	fmt.Println("----------- Unicambios Currency Exchange ----------------")
+
 	fmt.Printf("Request Currency: %s - Value: %f - OperationType: %s \n",
 		reqExchange.Exchange.Currency, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
-	var scrapper = buildScrapper(scrappingTimeout)
+	var scraper = scraping.BuildScraper(scrappingTimeout)
 
 	currenciesUnicambios := make([]currencyUnicambios, 0)
 
-	scrapCurrenciesInfo(scrapper, &currenciesUnicambios)
+	scrapCurrenciesUnicambios(scraper, &currenciesUnicambios)
 
-	scrapper.Visit(reqExchange.Url)
+	scraper.Visit(reqExchange.Url)
 
 	var resultExchange = calculateConversion(currenciesUnicambios, reqExchange)
 
@@ -76,37 +79,13 @@ func calculateConversion(currenciesInfo []currencyUnicambios, reqExchange *Excha
 	}
 }
 
-func buildScrapper(timeout time.Duration) *colly.Collector {
-	scrapper := colly.NewCollector()
-
-	scrapper.SetRequestTimeout(timeout)
-
-	scrapper.OnRequest(func(request *colly.Request) {
-		fmt.Println("Visting web page: " + request.URL.String())
-	})
-
-	scrapper.OnResponse(func(r *colly.Response) {
-		fmt.Println("Got response from page")
-	})
-
-	scrapper.OnError(func(r *colly.Response, e error) {
-		fmt.Println("Error when visiting page: ", e)
-	})
-
-	scrapper.OnScraped(func(r *colly.Response) {
-		fmt.Println("Finished scrapping page")
-	})
-
-	return scrapper
-}
-
-func scrapCurrenciesInfo(scrapper *colly.Collector, currenciesUnicambios *[]currencyUnicambios) {
+func scrapCurrenciesUnicambios(scraper *colly.Collector, currenciesUnicambios *[]currencyUnicambios) {
 
 	for tableSide, table := range currenciesTables {
 
-		fmt.Println("Scrapping currencies from table: ", tableSide)
+		fmt.Println("Scraping currencies from table: ", tableSide)
 
-		scrapper.OnHTML(table, func(tableHtml *colly.HTMLElement) {
+		scraper.OnHTML(table, func(tableHtml *colly.HTMLElement) {
 			tableHtml.ForEach(currenciesRows, func(i int, row *colly.HTMLElement) {
 				if row.ChildText("td:nth-child(2)") != "" {
 
@@ -121,7 +100,7 @@ func scrapCurrenciesInfo(scrapper *colly.Collector, currenciesUnicambios *[]curr
 						valueOnSale: valueOnSale,
 					}
 
-					fmt.Println("Currency scrapped: ", currencyUnicambio)
+					fmt.Println("Currency scraped: ", currencyUnicambio)
 
 					*currenciesUnicambios = append(*currenciesUnicambios, currencyUnicambio)
 				}
