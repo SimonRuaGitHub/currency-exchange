@@ -2,19 +2,17 @@ package interactions
 
 import (
 	scraping "currency-exchange-medellin/scraping"
-	"currency-exchange-medellin/utils"
 	"fmt"
-	"strings"
 
 	"github.com/gocolly/colly"
 )
 
 const (
-	currContainerTarget = "#currContainerTarget"
-	currCardsTarget     = "div.card-panel div.card-info"
-	currencyDescription = "span:nth-child(1)"
-	toBuyTarget         = "span:nth-child(2)"
-	onSaleTarget        = "span:nth-child(3)"
+	currContainerTarget   = "div.row > div"
+	currCardsTarget       = "div > div div"
+	currDescriptionTarget = "span:nth-child(1)"
+	toBuyTarget           = "span:nth-child(2)"
+	onSaleTarget          = "span:nth-child(3)"
 )
 
 type ExchangeNutifinanzas struct {
@@ -46,16 +44,17 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 
 func scrapCurrenciesNutifinanzas(scraper *colly.Collector, currenciesNutifinanzas *[]currencyNutifinanzas) {
 
-	scraper.OnHTML(currContainerTarget, func(cardsHtml *colly.HTMLElement) {
-		cardsHtml.ForEach(currCardsTarget, func(i int, currencyCard *colly.HTMLElement) {
-
+	/*scraper.OnHTML("#currenciesContainer", func(cardsHtml *colly.HTMLElement) {
+		fmt.Println("CardsHtml: ", cardsHtml)
+		cardsHtml.ForEach("div", func(i int, currencyCard *colly.HTMLElement) {
+			fmt.Println("CurrencyCard: ", currencyCard)
 			valueToBuyStr := strings.Split(currencyCard.ChildText(toBuyTarget), "$")[1]
 			valueOnSaleStr := strings.Split(currencyCard.ChildText(onSaleTarget), "$")[1]
 			valueToBuy, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
 			valueOnSale, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
 
 			currencyNutifinanzas := currencyNutifinanzas{
-				description: currencyCard.ChildText(currencyDescription),
+				description: currencyCard.ChildText(currDescriptionTarget),
 				valueToBuy:  valueToBuy,
 				valueOnSale: valueOnSale,
 			}
@@ -64,6 +63,10 @@ func scrapCurrenciesNutifinanzas(scraper *colly.Collector, currenciesNutifinanza
 
 			*currenciesNutifinanzas = append(*currenciesNutifinanzas, currencyNutifinanzas)
 		})
+	})*/
+
+	scraper.OnHTML("div#currenciesContainer", func(currenciesContainer *colly.HTMLElement) {
+		fmt.Println("currencies container: ", currenciesContainer)
 	})
 
 }

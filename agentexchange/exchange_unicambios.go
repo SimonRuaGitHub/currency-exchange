@@ -86,6 +86,7 @@ func scrapCurrenciesUnicambios(scraper *colly.Collector, currenciesUnicambios *[
 		fmt.Println("Scraping currencies from table: ", tableSide)
 
 		scraper.OnHTML(table, func(tableHtml *colly.HTMLElement) {
+			fmt.Println("Table: ", table)
 			tableHtml.ForEach(currenciesRows, func(i int, row *colly.HTMLElement) {
 				if row.ChildText("td:nth-child(2)") != "" {
 
