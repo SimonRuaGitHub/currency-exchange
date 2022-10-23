@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-rod/rod"
 	"github.com/gocolly/colly"
 )
 
-func BuildScraper(timeout time.Duration) *colly.Collector {
+func BuildCollyScrapper(timeout time.Duration) *colly.Collector {
 	scraper := colly.NewCollector()
 
 	scraper.SetRequestTimeout(timeout)
@@ -29,4 +30,11 @@ func BuildScraper(timeout time.Duration) *colly.Collector {
 	})
 
 	return scraper
+}
+
+func BuildGoRodScrapper(url string) *rod.Page {
+	browser := rod.New().MustConnect().NoDefaultDevice()
+	page := browser.MustPage(url).MustWindowFullscreen()
+
+	return page
 }

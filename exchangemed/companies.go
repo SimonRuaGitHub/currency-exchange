@@ -13,5 +13,5 @@ var ExchangeHouses = map[string]string{
 	"Homecambios":  "https://www.homecambios.com",
 	"Moneymax":     "http://www.moneymax.com.co",
 	"Nutifinanzas": "https://nutifinanzas.com",
-	"Unicambios":   "https://unicambios.com.co/servicios/#serv0",
+	//"Unicambios":   "https://unicambios.com.co/servicios/#serv0",
 }

@@ -2,17 +2,19 @@ package interactions
 
 import (
 	scraping "currency-exchange-medellin/scraping"
+	"currency-exchange-medellin/utils"
+	"strings"
+
 	"fmt"
 
-	"github.com/gocolly/colly"
+	"github.com/go-rod/rod"
 )
 
 const (
-	currContainerTarget   = "div.row > div"
-	currCardsTarget       = "div > div div"
-	currDescriptionTarget = "span:nth-child(1)"
-	toBuyTarget           = "span:nth-child(2)"
-	onSaleTarget          = "span:nth-child(3)"
+	currenciesTarget  = "#currenciesContainer div.card-info"
+	descriptionTarget = "span:nth-child(1)"
+	toBuyTarget       = "span:nth-child(3)"
+	onSaleTarget      = "span:nth-child(5)"
 )
 
 type ExchangeNutifinanzas struct {
@@ -31,42 +33,41 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 	fmt.Printf("Request Currency Exchange - Nutifinanzas: %s - Value: %f - OperationType: %s \n",
 		reqExchange.Exchange.Currency, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
-	var scraper = scraping.BuildScraper(scrappingTimeout)
+	var scraper = scraping.BuildGoRodScrapper(reqExchange.Url)
 
 	currenciesNutifinanzas := make([]currencyNutifinanzas, 0)
 
 	scrapCurrenciesNutifinanzas(scraper, &currenciesNutifinanzas)
 
-	scraper.Visit(reqExchange.Url)
-
 	return ResultExchange{}
 }
 
-func scrapCurrenciesNutifinanzas(scraper *colly.Collector, currenciesNutifinanzas *[]currencyNutifinanzas) {
+func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]currencyNutifinanzas) {
 
-	/*scraper.OnHTML("#currenciesContainer", func(cardsHtml *colly.HTMLElement) {
-		fmt.Println("CardsHtml: ", cardsHtml)
-		cardsHtml.ForEach("div", func(i int, currencyCard *colly.HTMLElement) {
-			fmt.Println("CurrencyCard: ", currencyCard)
-			valueToBuyStr := strings.Split(currencyCard.ChildText(toBuyTarget), "$")[1]
-			valueOnSaleStr := strings.Split(currencyCard.ChildText(onSaleTarget), "$")[1]
-			valueToBuy, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
-			valueOnSale, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
+	scraper.MustElement(currenciesTarget).ScrollIntoView()
 
-			currencyNutifinanzas := currencyNutifinanzas{
-				description: currencyCard.ChildText(currDescriptionTarget),
-				valueToBuy:  valueToBuy,
-				valueOnSale: valueOnSale,
-			}
+	cards := scraper.MustElements(currenciesTarget)
 
-			fmt.Println("Currency scraped: ", currencyNutifinanzas)
+	for _, card := range cards {
+		description, _ := card.MustElement(descriptionTarget).Text()
+		toBuy, _ := card.MustElement(toBuyTarget).Text()
+		onSale, _ := card.MustElement(onSaleTarget).Text()
 
-			*currenciesNutifinanzas = append(*currenciesNutifinanzas, currencyNutifinanzas)
-		})
-	})*/
+		valueToBuyStr := strings.Split(toBuy, "$")[1]
+		valueOnSaleStr := strings.Split(onSale, "$")[1]
 
-	scraper.OnHTML("div#currenciesContainer", func(currenciesContainer *colly.HTMLElement) {
-		fmt.Println("currencies container: ", currenciesContainer)
-	})
+		valueToBuy, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
+		valueOnSale, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
+
+		currencyNutifinanzas := currencyNutifinanzas{
+			description: description,
+			valueToBuy:  valueToBuy,
+			valueOnSale: valueOnSale,
+		}
+
+		*currenciesNutifinanzas = append(*currenciesNutifinanzas, currencyNutifinanzas)
+
+		fmt.Printf("Description: %s\nValue To Buy: %f\nValue On Sale: %f\n", currencyNutifinanzas.description, currencyNutifinanzas.valueToBuy, currencyNutifinanzas.valueOnSale)
+	}
 
 }

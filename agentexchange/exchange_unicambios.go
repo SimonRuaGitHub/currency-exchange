@@ -38,7 +38,7 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 	fmt.Printf("Request Currency: %s - Value: %f - OperationType: %s \n",
 		reqExchange.Exchange.Currency, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
-	var scraper = scraping.BuildScraper(scrappingTimeout)
+	var scraper = scraping.BuildCollyScrapper(scrappingTimeout)
 
 	currenciesUnicambios := make([]currencyUnicambios, 0)
 
