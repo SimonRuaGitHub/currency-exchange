@@ -21,12 +21,6 @@ type ExchangeNutifinanzas struct {
 	RequestExchange
 }
 
-type currencyNutifinanzas struct {
-	description string
-	valueOnSale float64
-	valueToBuy  float64
-}
-
 func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 	fmt.Println("----------- Nutifinanzas Currency Exchange ----------------")
 
@@ -35,14 +29,19 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 
 	var scraper = scraping.BuildGoRodScrapper(reqExchange.Url)
 
-	currenciesNutifinanzas := make([]currencyNutifinanzas, 0)
+	currenciesNutifinanzas := make([]Currency, 0)
 
 	scrapCurrenciesNutifinanzas(scraper, &currenciesNutifinanzas)
 
-	return ResultExchange{}
+	var resultExchange = CalculateConversion(currenciesNutifinanzas, &reqExchange.Exchange)
+
+	fmt.Printf("Result Exchange Unicambios:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
+		resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
+
+	return resultExchange
 }
 
-func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]currencyNutifinanzas) {
+func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]Currency) {
 
 	scraper.MustElement(currenciesTarget).ScrollIntoView()
 
@@ -59,7 +58,7 @@ func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]cu
 		valueToBuy, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
 		valueOnSale, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
 
-		currencyNutifinanzas := currencyNutifinanzas{
+		currencyNutifinanzas := Currency{
 			description: description,
 			valueToBuy:  valueToBuy,
 			valueOnSale: valueOnSale,
