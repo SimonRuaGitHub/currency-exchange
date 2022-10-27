@@ -31,7 +31,7 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 	fmt.Println("----------- Nutifinanzas Currency Exchange ----------------")
 
 	fmt.Printf("Request Currency Exchange - Nutifinanzas: %s - Value: %f - OperationType: %s \n",
-		reqExchange.Exchange.Currency, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
+		reqExchange.Exchange.CurrencyCode, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
 	var scraper = scraping.BuildGoRodScrapper(reqExchange.Url)
 

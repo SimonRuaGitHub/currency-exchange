@@ -17,7 +17,7 @@ func main() {
 		case exchangemed.Globocambios:
 			reqExchange := agent.ExchangeGlobocambios{
 				RequestExchange: agent.RequestExchange{
-					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+					Exchange: agent.Exchange{CurrencyCode: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
@@ -26,7 +26,7 @@ func main() {
 		case exchangemed.Moneymax:
 			reqExchange := agent.ExchangeMaxmoney{
 				RequestExchange: agent.RequestExchange{
-					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+					Exchange: agent.Exchange{CurrencyCode: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
@@ -36,7 +36,7 @@ func main() {
 		case exchangemed.Unicambios:
 			reqExchange := agent.ExchangeUnicambios{
 				RequestExchange: agent.RequestExchange{
-					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+					Exchange: agent.Exchange{CurrencyCode: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
@@ -46,7 +46,7 @@ func main() {
 		case exchangemed.Homecambios:
 			reqExchange := agent.ExchangeHomeCambios{
 				RequestExchange: agent.RequestExchange{
-					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+					Exchange: agent.Exchange{CurrencyCode: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}
@@ -56,7 +56,7 @@ func main() {
 		case exchangemed.Nutifinanzas:
 			reqExchange := agent.ExchangeNutifinanzas{
 				RequestExchange: agent.RequestExchange{
-					Exchange: agent.Exchange{Currency: "USD", Value: 242, OperationType: "purchase"},
+					Exchange: agent.Exchange{CurrencyCode: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
 			}

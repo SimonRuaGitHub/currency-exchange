@@ -25,61 +25,30 @@ type ExchangeUnicambios struct {
 	RequestExchange
 }
 
-type currencyUnicambios struct {
-	description string
-	valueOnSale float64
-	valueToBuy  float64
-}
-
 func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 
 	fmt.Println("----------- Unicambios Currency Exchange ----------------")
 
 	fmt.Printf("Request Currency: %s - Value: %f - OperationType: %s \n",
-		reqExchange.Exchange.Currency, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
+		reqExchange.Exchange.CurrencyCode, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
 	var scraper = scraping.BuildCollyScrapper(scrappingTimeout)
 
-	currenciesUnicambios := make([]currencyUnicambios, 0)
+	currenciesUnicambios := make([]Currency, 0)
 
 	scrapCurrenciesUnicambios(scraper, &currenciesUnicambios)
 
 	scraper.Visit(reqExchange.Url)
 
-	var resultExchange = calculateConversion(currenciesUnicambios, reqExchange)
+	var resultExchange = CalculateConversion(currenciesUnicambios, &reqExchange.Exchange)
 
 	fmt.Printf("Result Exchange Unicambios:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
-		resultExchange.Exchange.Currency, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
+		resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
 
 	return resultExchange
 }
 
-func calculateConversion(currenciesInfo []currencyUnicambios, reqExchange *ExchangeUnicambios) ResultExchange {
-	var valueConvertion float64 = 0.0
-	var valueOperation float64 = 0.0
-
-	for _, currencyInfo := range currenciesInfo {
-		if strings.Contains(currencyInfo.description, reqExchange.Exchange.Currency) {
-			fmt.Println("Found currency: ", currencyInfo.description)
-
-			if reqExchange.Exchange.OperationType == "purchase" {
-				valueConvertion = currencyInfo.valueToBuy * reqExchange.Exchange.Value
-				valueOperation = currencyInfo.valueToBuy
-			} else {
-				valueConvertion = currencyInfo.valueOnSale * reqExchange.Exchange.Value
-				valueOperation = currencyInfo.valueOnSale
-			}
-			break
-		}
-	}
-
-	return ResultExchange{
-		Exchange{reqExchange.Currency, valueOperation, reqExchange.OperationType},
-		valueConvertion,
-	}
-}
-
-func scrapCurrenciesUnicambios(scraper *colly.Collector, currenciesUnicambios *[]currencyUnicambios) {
+func scrapCurrenciesUnicambios(scraper *colly.Collector, currenciesUnicambios *[]Currency) {
 
 	for tableSide, table := range currenciesTables {
 
@@ -95,7 +64,7 @@ func scrapCurrenciesUnicambios(scraper *colly.Collector, currenciesUnicambios *[
 					valueToBuy, _ := utils.FromStringToFloat(targetValueToBuy)
 					valueOnSale, _ := utils.FromStringToFloat(targetValueOnSale)
 
-					currencyUnicambio := currencyUnicambios{
+					currencyUnicambio := Currency{
 						description: row.ChildText("td:nth-child(2)"),
 						valueToBuy:  valueToBuy,
 						valueOnSale: valueOnSale,
