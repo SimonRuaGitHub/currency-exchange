@@ -5,16 +5,11 @@ import (
 	utils "currency-exchange-medellin/utils"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/gocolly/colly"
 )
 
-const scrappingTimeout = 120 * time.Second
-
-const (
-	currenciesRows = "tr"
-)
+const currenciesRows = "tr"
 
 var currenciesTables = map[string]string{
 	"tableLeftSide":  "section.premium-tabs-section table#supsystic-table-12 tbody",
@@ -32,7 +27,7 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 	fmt.Printf("Request Currency: %s - Value: %f - OperationType: %s \n",
 		reqExchange.Exchange.CurrencyCode, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
-	var scraper = scraping.BuildCollyScrapper(scrappingTimeout)
+	var scraper = scraping.BuildCollyScrapper(scraping.DefaultTimeOutColly)
 
 	currenciesUnicambios := make([]Currency, 0)
 

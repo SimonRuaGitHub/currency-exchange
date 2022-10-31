@@ -8,6 +8,8 @@ import (
 	"github.com/gocolly/colly"
 )
 
+const DefaultTimeOutColly = 120 * time.Second
+
 func BuildCollyScrapper(timeout time.Duration) *colly.Collector {
 	scraper := colly.NewCollector()
 
