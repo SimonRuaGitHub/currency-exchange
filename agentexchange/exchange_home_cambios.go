@@ -11,7 +11,7 @@ import (
 
 const (
 	containerTarget   = "#SITE_PAGES_TRANSITION_GROUP"
-	purchaseUSDtarget = "#comp-l721a1km > h2.font_2:nth-child(1) > span > span > span > span > span"
+	purchaseUSDtarget = "#comp-l721a1km > h2.font_2:nth-child(1) > span"
 	onSaleUSDtarget   = "#comp-l5r49t4d > h2 > span > span > span > span > span"
 	purchaseEURtarget = "#comp-l9t12o5w > h2 > span > span > span > span > span"
 	onSaleEURtarget   = "#comp-l9t12o5w > h2 > span > span > span > span > span"
@@ -62,8 +62,8 @@ func scrapCurrenciesHomecambios(scraper *colly.Collector, currenciesHc *[]Curren
 
 		currencyUSD := Currency{
 			description: "USD",
-			valueToBuy:  purchaseUSD,
-			valueOnSale: onSaleUSD,
+			valueToBuy:  onSaleUSD,
+			valueOnSale: purchaseUSD,
 		}
 
 		*currenciesHc = append(*currenciesHc, currencyUSD)
@@ -73,8 +73,8 @@ func scrapCurrenciesHomecambios(scraper *colly.Collector, currenciesHc *[]Curren
 
 		currencyEUR := Currency{
 			description: "EUR",
-			valueToBuy:  purchaseEUR,
-			valueOnSale: onSaleEUR,
+			valueToBuy:  onSaleEUR,
+			valueOnSale: purchaseEUR,
 		}
 
 		*currenciesHc = append(*currenciesHc, currencyEUR)
@@ -84,8 +84,8 @@ func scrapCurrenciesHomecambios(scraper *colly.Collector, currenciesHc *[]Curren
 
 		currencyMXN := Currency{
 			description: "MXN",
-			valueToBuy:  purchaseMXN,
-			valueOnSale: onSaleMXN,
+			valueToBuy:  onSaleMXN,
+			valueOnSale: purchaseMXN,
 		}
 
 		*currenciesHc = append(*currenciesHc, currencyMXN)

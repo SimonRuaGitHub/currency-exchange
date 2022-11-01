@@ -74,13 +74,13 @@ func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]Cu
 		valueToBuyStr := strings.Split(toBuy, "$")[1]
 		valueOnSaleStr := strings.Split(onSale, "$")[1]
 
-		valueToBuy, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
-		valueOnSale, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
+		purchaseValue, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
+		onSaleValue, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
 
 		currencyNutifinanzas := Currency{
 			description: strings.Trim(description, " "),
-			valueToBuy:  valueToBuy,
-			valueOnSale: valueOnSale,
+			valueToBuy:  onSaleValue,
+			valueOnSale: purchaseValue,
 		}
 
 		*currenciesNutifinanzas = append(*currenciesNutifinanzas, currencyNutifinanzas)
