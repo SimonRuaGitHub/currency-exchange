@@ -51,7 +51,7 @@ func (reqExchange *ExchangeGlobocambios) selectExchange() ResultExchange {
 	fmt.Printf("Request Currency Exchange - Globocambios: %s - Value: %f - OperationType: %s \n",
 		reqExchange.Exchange.CurrencyCode, reqExchange.Exchange.Value, reqExchange.Exchange.OperationType)
 
-	var scraper = scraping.BuildGoRodScrapperOnDebug(reqExchange.Url, false, true, 3*time.Second)
+	var scraper = scraping.BuildGoRodScrapper(reqExchange.Url)
 
 	currencyGlobocambios := scrapCurrencyGlobocambios(scraper, reqExchange.Exchange.CurrencyCode)
 
