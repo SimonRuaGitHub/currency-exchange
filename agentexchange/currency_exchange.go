@@ -59,3 +59,27 @@ func CalculateConversion(currenciesInfo []Currency, reqExchange *Exchange) Resul
 		valueConvertion,
 	}
 }
+
+func HomologateCurrencyDespByCode(currencies []Currency, currencyCodeMap map[string]string) []Currency {
+
+	newCurrencies := make([]Currency, 0)
+
+	for code, description := range currencyCodeMap {
+		for _, currency := range currencies {
+
+			if currency.description == description {
+				newCurrency := Currency{
+					description: code,
+					valueOnSale: currency.valueOnSale,
+					valueToBuy:  currency.valueToBuy,
+				}
+
+				newCurrencies = append(newCurrencies, newCurrency)
+
+				break
+			}
+		}
+	}
+
+	return newCurrencies
+}

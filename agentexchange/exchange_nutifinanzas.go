@@ -21,7 +21,7 @@ type ExchangeNutifinanzas struct {
 	RequestExchange
 }
 
-var currencyCodeMap = map[string]string{
+var currencyCodeNutiMap = map[string]string{
 	"USD":     "US Dólar",
 	"EUR":     "Euro",
 	"EUR-LOW": "Euro 200 y 500",
@@ -50,7 +50,7 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 
 	scrapCurrenciesNutifinanzas(scraper, &currenciesNutifinanzas)
 
-	currenciesNutifinanzas = homologateCurrencyDespByCode(currenciesNutifinanzas, currencyCodeMap)
+	currenciesNutifinanzas = HomologateCurrencyDespByCode(currenciesNutifinanzas, currencyCodeNutiMap)
 
 	var resultExchange = CalculateConversion(currenciesNutifinanzas, &reqExchange.Exchange)
 
@@ -58,30 +58,6 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 		resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
 
 	return resultExchange
-}
-
-func homologateCurrencyDespByCode(currencies []Currency, currencyCodeMap map[string]string) []Currency {
-
-	newCurrencies := make([]Currency, 0)
-
-	for code, description := range currencyCodeMap {
-		for _, currency := range currencies {
-
-			if currency.description == description {
-				newCurrency := Currency{
-					description: code,
-					valueOnSale: currency.valueOnSale,
-					valueToBuy:  currency.valueToBuy,
-				}
-
-				newCurrencies = append(newCurrencies, newCurrency)
-
-				break
-			}
-		}
-	}
-
-	return newCurrencies
 }
 
 func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]Currency) {
