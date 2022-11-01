@@ -20,6 +20,7 @@ func main() {
 					Exchange: agent.Exchange{CurrencyCode: "USD", Value: 242, OperationType: "purchase"},
 					Url:      url,
 				},
+				SiteName: "Aeropuerto Internacional José María Córdova",
 			}
 
 			agent.SelectCurrencyExchange(&reqExchange)

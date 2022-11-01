@@ -2,7 +2,7 @@ package interactions
 
 import (
 	scraping "currency-exchange-medellin/scraping"
-	"currency-exchange-medellin/utils"
+	utils "currency-exchange-medellin/utils"
 	"fmt"
 	"strings"
 

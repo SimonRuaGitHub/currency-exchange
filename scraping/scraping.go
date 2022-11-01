@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 	"github.com/gocolly/colly"
 )
 
@@ -35,7 +36,27 @@ func BuildCollyScrapper(timeout time.Duration) *colly.Collector {
 }
 
 func BuildGoRodScrapper(url string) *rod.Page {
+
 	browser := rod.New().MustConnect().NoDefaultDevice()
+	page := browser.MustPage(url).MustWindowFullscreen()
+
+	return page
+}
+
+func BuildGoRodScrapperOnDebug(url string, enableHeadless bool, enableTrace bool, slowMotion time.Duration) *rod.Page {
+	launcher := launcher.New().Headless(enableHeadless).StartURL(url)
+
+	urlOnLauncher := launcher.MustLaunch()
+
+	// Trace shows verbose debug information for each action executed
+	// Slowmotion is a debug related function that waits 2 seconds between
+	// each action, making it easier to inspect what your code is doing.
+	browser := rod.New().
+		ControlURL(urlOnLauncher).
+		Trace(enableTrace).
+		SlowMotion(slowMotion).
+		MustConnect()
+
 	page := browser.MustPage(url).MustWindowFullscreen()
 
 	return page
