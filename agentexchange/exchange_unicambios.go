@@ -60,9 +60,9 @@ func scrapCurrenciesUnicambios(scraper *colly.Collector, currenciesUnicambios *[
 					onSaleValue, _ := utils.FromStringToFloat(targetValueOnSale)
 
 					currencyUnicambio := Currency{
-						description: row.ChildText("td:nth-child(2)"),
-						valueToBuy:  onSaleValue,
-						valueOnSale: purchaseValue,
+						Description: row.ChildText("td:nth-child(2)"),
+						ValueToBuy:  onSaleValue,
+						ValueOnSale: purchaseValue,
 					}
 
 					fmt.Println("Currency scraped: ", currencyUnicambio)

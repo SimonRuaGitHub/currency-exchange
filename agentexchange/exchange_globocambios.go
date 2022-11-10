@@ -86,7 +86,7 @@ func scrapCurrencyGlobocambios(scraper *rod.Page, currencyCode string) Currency 
 	fmt.Println("value operation: ", valueOperation)
 
 	return Currency{
-		valueToBuy:  valueOperation,
-		description: currencyCode,
+		ValueToBuy:  valueOperation,
+		Description: currencyCode,
 	}
 }

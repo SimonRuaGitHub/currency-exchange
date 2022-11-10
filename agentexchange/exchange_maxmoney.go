@@ -58,9 +58,9 @@ func scrapCurrenciesMoneymax(scraper *colly.Collector, currenciesMoneymax *[]Cur
 			onSaleValue, _ := utils.FromStringToFloat(strings.Trim(onSaleValueStr, "$ "))
 
 			currencyMoneymax := Currency{
-				description: description,
-				valueToBuy:  onSaleValue,
-				valueOnSale: purchaseValue,
+				Description: description,
+				ValueToBuy:  onSaleValue,
+				ValueOnSale: purchaseValue,
 			}
 
 			fmt.Println("Currency scraped: ", currencyMoneymax)

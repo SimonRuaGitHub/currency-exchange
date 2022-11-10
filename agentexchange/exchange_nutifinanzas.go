@@ -71,21 +71,21 @@ func scrapCurrenciesNutifinanzas(scraper *rod.Page, currenciesNutifinanzas *[]Cu
 		toBuy, _ := card.MustElement(toBuyTarget).Text()
 		onSale, _ := card.MustElement(onSaleTarget).Text()
 
-		valueToBuyStr := strings.Split(toBuy, "$")[1]
-		valueOnSaleStr := strings.Split(onSale, "$")[1]
+		ValueToBuyStr := strings.Split(toBuy, "$")[1]
+		ValueOnSaleStr := strings.Split(onSale, "$")[1]
 
-		purchaseValue, _ := utils.FromStringToFloat(strings.Trim(valueToBuyStr, " "))
-		onSaleValue, _ := utils.FromStringToFloat(strings.Trim(valueOnSaleStr, " "))
+		purchaseValue, _ := utils.FromStringToFloat(strings.Trim(ValueToBuyStr, " "))
+		onSaleValue, _ := utils.FromStringToFloat(strings.Trim(ValueOnSaleStr, " "))
 
 		currencyNutifinanzas := Currency{
-			description: strings.Trim(description, " "),
-			valueToBuy:  onSaleValue,
-			valueOnSale: purchaseValue,
+			Description: strings.Trim(description, " "),
+			ValueToBuy:  onSaleValue,
+			ValueOnSale: purchaseValue,
 		}
 
 		*currenciesNutifinanzas = append(*currenciesNutifinanzas, currencyNutifinanzas)
 
-		fmt.Printf("Description: %s\nValue To Buy: %f\nValue On Sale: %f\n", currencyNutifinanzas.description, currencyNutifinanzas.valueToBuy, currencyNutifinanzas.valueOnSale)
+		fmt.Printf("Description: %s\nValue To Buy: %f\nValue On Sale: %f\n", currencyNutifinanzas.Description, currencyNutifinanzas.ValueToBuy, currencyNutifinanzas.ValueOnSale)
 	}
 
 }

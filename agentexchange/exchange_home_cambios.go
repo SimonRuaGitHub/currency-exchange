@@ -61,9 +61,9 @@ func scrapCurrenciesHomecambios(scraper *colly.Collector, currenciesHc *[]Curren
 		onSaleUSD, _ := utils.FromStringToFloat(strings.Trim(onSaleUSDstr, " "))
 
 		currencyUSD := Currency{
-			description: "USD",
-			valueToBuy:  onSaleUSD,
-			valueOnSale: purchaseUSD,
+			Description: "USD",
+			ValueToBuy:  onSaleUSD,
+			ValueOnSale: purchaseUSD,
 		}
 
 		*currenciesHc = append(*currenciesHc, currencyUSD)
@@ -72,9 +72,9 @@ func scrapCurrenciesHomecambios(scraper *colly.Collector, currenciesHc *[]Curren
 		onSaleEUR, _ := utils.FromStringToFloat(strings.Trim(onSaleEURstr, " "))
 
 		currencyEUR := Currency{
-			description: "EUR",
-			valueToBuy:  onSaleEUR,
-			valueOnSale: purchaseEUR,
+			Description: "EUR",
+			ValueToBuy:  onSaleEUR,
+			ValueOnSale: purchaseEUR,
 		}
 
 		*currenciesHc = append(*currenciesHc, currencyEUR)
@@ -83,9 +83,9 @@ func scrapCurrenciesHomecambios(scraper *colly.Collector, currenciesHc *[]Curren
 		onSaleMXN, _ := utils.FromStringToFloat(strings.Trim(onSaleMXNstr, " "))
 
 		currencyMXN := Currency{
-			description: "MXN",
-			valueToBuy:  onSaleMXN,
-			valueOnSale: purchaseMXN,
+			Description: "MXN",
+			ValueToBuy:  onSaleMXN,
+			ValueOnSale: purchaseMXN,
 		}
 
 		*currenciesHc = append(*currenciesHc, currencyMXN)

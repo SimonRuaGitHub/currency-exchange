@@ -26,9 +26,9 @@ type Exchange struct {
 }
 
 type Currency struct {
-	description string
-	valueOnSale float64
-	valueToBuy  float64
+	Description string
+	ValueOnSale float64
+	ValueToBuy  float64
 }
 
 func SelectCurrencyExchange(agent AgentCurrencyExchange) ResultExchange {
@@ -40,15 +40,15 @@ func CalculateConversion(currenciesInfo []Currency, reqExchange *Exchange) Resul
 	var valueOperation float64 = 0.0
 
 	for _, currencyInfo := range currenciesInfo {
-		if strings.Contains(currencyInfo.description, reqExchange.CurrencyCode) {
-			fmt.Println("Found currency: ", currencyInfo.description)
+		if strings.Contains(currencyInfo.Description, reqExchange.CurrencyCode) {
+			fmt.Println("Found currency: ", currencyInfo.Description)
 
 			if reqExchange.OperationType == "purchase" {
-				valueConvertion = currencyInfo.valueToBuy * reqExchange.Value
-				valueOperation = currencyInfo.valueToBuy
+				valueConvertion = currencyInfo.ValueToBuy * reqExchange.Value
+				valueOperation = currencyInfo.ValueToBuy
 			} else {
-				valueConvertion = currencyInfo.valueOnSale * reqExchange.Value
-				valueOperation = currencyInfo.valueOnSale
+				valueConvertion = currencyInfo.ValueOnSale * reqExchange.Value
+				valueOperation = currencyInfo.ValueOnSale
 			}
 			break
 		}
@@ -67,11 +67,11 @@ func HomologateCurrencyDespByCode(currencies []Currency, currencyCodeMap map[str
 	for code, description := range currencyCodeMap {
 		for _, currency := range currencies {
 
-			if currency.description == description {
+			if currency.Description == description {
 				newCurrency := Currency{
-					description: code,
-					valueOnSale: currency.valueOnSale,
-					valueToBuy:  currency.valueToBuy,
+					Description: code,
+					ValueOnSale: currency.ValueOnSale,
+					ValueToBuy:  currency.ValueToBuy,
 				}
 
 				newCurrencies = append(newCurrencies, newCurrency)
