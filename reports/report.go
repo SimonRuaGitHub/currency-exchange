@@ -56,11 +56,11 @@ func reportCSV(filePath string, currencies []agent.Currency) {
 	defer writer.Flush()
 
 	var currencyTable = [][]string{
-		{"Description", "ValueOnSale", "ValueToBuy", "Date time Report"},
+		{"Description", "ValueOnSale", "ValueToBuy", "DateTimeReport"},
 	}
 
 	for _, re := range reportCurrencies {
-		rowReportCurr := []string{re.description, re.valueOnSale, re.valueToBuy, re.dateTime.GoString()}
+		rowReportCurr := []string{re.description, re.valueOnSale, re.valueToBuy, re.dateTime.Format("2006-01-02T15:04:05-0700")}
 		currencyTable = append(currencyTable, rowReportCurr)
 	}
 
