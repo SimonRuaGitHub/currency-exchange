@@ -57,7 +57,7 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 
 	reports.ReportCSV(reportPaths["NF"], reportCurrencies)
 
-	var resultExchange = CalculateConversion(currenciesNutifinanzas, &reqExchange.Exchange)
+	var resultExchange = CalculateConversion(currenciesNutifinanzas, &reqExchange.RequestExchange)
 
 	fmt.Printf("Result Exchange Unicambios:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
 		resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)

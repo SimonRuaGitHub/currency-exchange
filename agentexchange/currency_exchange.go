@@ -11,12 +11,15 @@ type AgentCurrencyExchange interface {
 
 type RequestExchange struct {
 	Exchange
-	Url string
+	Url  string
+	Name string
 }
 
 type ResultExchange struct {
 	Exchange
 	ValueConvertion float64
+	Url             string
+	Name            string
 }
 
 type Exchange struct {
@@ -35,12 +38,12 @@ func SelectCurrencyExchange(agent AgentCurrencyExchange) ResultExchange {
 	return agent.selectExchange()
 }
 
-func CalculateConversion(currenciesInfo []Currency, reqExchange *Exchange) ResultExchange {
+func CalculateConversion(currenciesInfo []Currency, reqExchange *RequestExchange) ResultExchange {
 	var valueConvertion float64 = 0.0
 	var valueOperation float64 = 0.0
 
 	for _, currencyInfo := range currenciesInfo {
-		if strings.Contains(currencyInfo.Description, reqExchange.CurrencyCode) {
+		if strings.Contains(currencyInfo.Description, reqExchange.Exchange.CurrencyCode) {
 			fmt.Println("Found currency: ", currencyInfo.Description)
 
 			if reqExchange.OperationType == "purchase" {
@@ -57,6 +60,8 @@ func CalculateConversion(currenciesInfo []Currency, reqExchange *Exchange) Resul
 	return ResultExchange{
 		Exchange{reqExchange.CurrencyCode, valueOperation, reqExchange.OperationType},
 		valueConvertion,
+		reqExchange.Url,
+		reqExchange.Name,
 	}
 }
 

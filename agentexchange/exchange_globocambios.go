@@ -60,7 +60,7 @@ func (reqExchange *ExchangeGlobocambios) selectExchange() ResultExchange {
 
 	reports.ReportCSV(reportPaths["GC"], reportCurrencies)
 
-	var resultExchange = CalculateConversion([]Currency{currencyGlobocambios}, &reqExchange.Exchange)
+	var resultExchange = CalculateConversion([]Currency{currencyGlobocambios}, &reqExchange.RequestExchange)
 
 	fmt.Printf("Result Exchange Unicambios:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
 		resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)

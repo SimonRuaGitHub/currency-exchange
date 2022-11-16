@@ -40,7 +40,7 @@ func (reqExchange *ExchangeUnicambios) selectExchange() ResultExchange {
 
 	reports.ReportCSV(reportPaths["UC"], reportCurrencies)
 
-	var resultExchange = CalculateConversion(currenciesUnicambios, &reqExchange.Exchange)
+	var resultExchange = CalculateConversion(currenciesUnicambios, &reqExchange.RequestExchange)
 
 	fmt.Printf("Result Exchange Unicambios:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
 		resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
