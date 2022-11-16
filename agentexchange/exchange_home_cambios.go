@@ -41,7 +41,7 @@ func (reqExchange *ExchangeHomeCambios) selectExchange() ResultExchange {
 
 	reportCurrencies := FromCurrenciesToReportCurrencies(currenciesHc)
 
-	reports.ReportCSV(reportPaths["HC"], reportCurrencies)
+	reports.ReportCSV(ReportPaths["HC"], reportCurrencies)
 
 	var resultExchange = CalculateConversion(currenciesHc, &reqExchange.RequestExchange)
 

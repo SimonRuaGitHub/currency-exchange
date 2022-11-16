@@ -8,12 +8,13 @@ import (
 
 const rootFolder = "reports/"
 
-var reportPaths = map[string]string{
-	"GC": rootFolder + "globocambios.csv",
-	"HC": rootFolder + "homecambios.csv",
-	"MM": rootFolder + "moneymax.csv",
-	"NF": rootFolder + "nutifinanzas.csv",
-	"UC": rootFolder + "unicambios.csv",
+var ReportPaths = map[string]string{
+	"GC":        rootFolder + "globocambios.csv",
+	"HC":        rootFolder + "homecambios.csv",
+	"MM":        rootFolder + "moneymax.csv",
+	"NF":        rootFolder + "nutifinanzas.csv",
+	"UC":        rootFolder + "unicambios.csv",
+	"BESTOFFER": rootFolder + "bestoffer.csv",
 }
 
 func mapToReportCurrency(currency Currency) reports.ReportCurrency {
@@ -26,6 +27,21 @@ func mapToReportCurrency(currency Currency) reports.ReportCurrency {
 		ValueOnSale: valueOnSaleStr,
 		Description: currency.Description,
 		DateTime:    time.Now(),
+	}
+}
+
+func MapToReportBestOffer(resultExchange ResultExchange) reports.ReportBestOffer {
+
+	valueOperationStr := fmt.Sprintf("%f", resultExchange.Exchange.Value)
+	valueConvertionStr := fmt.Sprintf("%f", resultExchange.ValueConvertion)
+
+	return reports.ReportBestOffer{
+		Name:            resultExchange.Name,
+		CurrencyCode:    resultExchange.Exchange.CurrencyCode,
+		OperationType:   resultExchange.Exchange.OperationType,
+		ValueOperation:  valueOperationStr,
+		ValueConversion: valueConvertionStr,
+		DateTime:        time.Now(),
 	}
 }
 

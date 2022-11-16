@@ -40,7 +40,7 @@ func (reqExchange *ExchangeMaxmoney) selectExchange() ResultExchange {
 
 	reportCurrencies := FromCurrenciesToReportCurrencies(currenciesMoneymax)
 
-	reports.ReportCSV(reportPaths["MM"], reportCurrencies)
+	reports.ReportCSV(ReportPaths["MM"], reportCurrencies)
 
 	var resultExchange = CalculateConversion(currenciesMoneymax, &reqExchange.RequestExchange)
 
