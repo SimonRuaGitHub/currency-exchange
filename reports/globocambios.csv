@@ -1,2 +1,2 @@
-Description,ValueOnSale,ValueToBuy,DateTimeReport
-USD,0.000000,4970.001074,2022-11-15T21:50:11-0500
+Description,OnSalePrice,PurchasePrice,DateTimeReport
+USD,4970.001074,0.000000,2022-11-15T23:47:42-0500
