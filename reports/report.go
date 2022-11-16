@@ -1,48 +1,20 @@
 package reports
 
 import (
-	agent "currency-exchange-medellin/agentexchange"
 	"encoding/csv"
-	"fmt"
 	"log"
 	"os"
 	"time"
 )
 
 type ReportCurrency struct {
-	valueToBuy  string
-	valueOnSale string
-	description string
-	dateTime    time.Time
+	ValueToBuy  string
+	ValueOnSale string
+	Description string
+	DateTime    time.Time
 }
 
-func mapToReportCurrency(currency agent.Currency) ReportCurrency {
-
-	valueOnSaleStr := fmt.Sprintf("%f", currency.ValueOnSale)
-	valueToBuyStr := fmt.Sprintf("%f", currency.ValueToBuy)
-
-	return ReportCurrency{
-		valueToBuy:  valueToBuyStr,
-		valueOnSale: valueOnSaleStr,
-		description: currency.Description,
-		dateTime:    time.Now(),
-	}
-}
-
-func fromCurrenciesToReportCurrencies(currencies []agent.Currency) []ReportCurrency {
-	reportCurrencies := make([]ReportCurrency, 0)
-
-	for _, currency := range currencies {
-		reportCurrency := mapToReportCurrency(currency)
-		reportCurrencies = append(reportCurrencies, reportCurrency)
-	}
-
-	return reportCurrencies
-}
-
-func reportCSV(filePath string, currencies []agent.Currency) {
-
-	reportCurrencies := fromCurrenciesToReportCurrencies(currencies)
+func ReportCSV(filePath string, reportCurrencies []ReportCurrency) {
 
 	file, errCreateFile := os.Create(filePath)
 	if errCreateFile != nil {
@@ -60,7 +32,7 @@ func reportCSV(filePath string, currencies []agent.Currency) {
 	}
 
 	for _, re := range reportCurrencies {
-		rowReportCurr := []string{re.description, re.valueOnSale, re.valueToBuy, re.dateTime.Format("2006-01-02T15:04:05-0700")}
+		rowReportCurr := []string{re.Description, re.ValueOnSale, re.ValueToBuy, re.DateTime.Format("2006-01-02T15:04:05-0700")}
 		currencyTable = append(currencyTable, rowReportCurr)
 	}
 

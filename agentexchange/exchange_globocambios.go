@@ -1,6 +1,7 @@
 package interactions
 
 import (
+	reports "currency-exchange-medellin/reports"
 	scraping "currency-exchange-medellin/scraping"
 	utils "currency-exchange-medellin/utils"
 	"fmt"
@@ -23,6 +24,8 @@ type ExchangeGlobocambios struct {
 	RequestExchange
 	SiteName string
 }
+
+const filePathReport = "reports/globocambios.csv"
 
 var currencyCodeGloboMap = map[string]string{
 	"USD": "Dólar USA",
@@ -54,6 +57,10 @@ func (reqExchange *ExchangeGlobocambios) selectExchange() ResultExchange {
 	var scraper = scraping.BuildGoRodScrapper(reqExchange.Url)
 
 	currencyGlobocambios := scrapCurrencyGlobocambios(scraper, reqExchange.Exchange.CurrencyCode)
+
+	reportCurrencies := FromCurrenciesToReportCurrencies([]Currency{currencyGlobocambios})
+
+	reports.ReportCSV(filePathReport, reportCurrencies)
 
 	var resultExchange = CalculateConversion([]Currency{currencyGlobocambios}, &reqExchange.Exchange)
 
