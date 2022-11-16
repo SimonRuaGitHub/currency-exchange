@@ -25,8 +25,6 @@ type ExchangeGlobocambios struct {
 	SiteName string
 }
 
-const filePathReport = "reports/globocambios.csv"
-
 var currencyCodeGloboMap = map[string]string{
 	"USD": "Dólar USA",
 	"EUR": "Euro",
@@ -60,7 +58,7 @@ func (reqExchange *ExchangeGlobocambios) selectExchange() ResultExchange {
 
 	reportCurrencies := FromCurrenciesToReportCurrencies([]Currency{currencyGlobocambios})
 
-	reports.ReportCSV(filePathReport, reportCurrencies)
+	reports.ReportCSV(reportPaths["GC"], reportCurrencies)
 
 	var resultExchange = CalculateConversion([]Currency{currencyGlobocambios}, &reqExchange.Exchange)
 

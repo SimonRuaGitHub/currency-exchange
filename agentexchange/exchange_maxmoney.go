@@ -1,6 +1,7 @@
 package interactions
 
 import (
+	reports "currency-exchange-medellin/reports"
 	scraping "currency-exchange-medellin/scraping"
 	"currency-exchange-medellin/utils"
 	"fmt"
@@ -21,6 +22,8 @@ const (
 	onSaleColTarget      = "td:nth-child(3)"
 )
 
+const mmReportPath = "reports/moneymax.csv"
+
 func (reqExchange *ExchangeMaxmoney) selectExchange() ResultExchange {
 	fmt.Println("----------- Moneymax Currency Exchange ----------------")
 
@@ -34,6 +37,10 @@ func (reqExchange *ExchangeMaxmoney) selectExchange() ResultExchange {
 	scrapCurrenciesMoneymax(scraper, &currenciesMoneymax)
 
 	scraper.Visit(reqExchange.Url)
+
+	reportCurrencies := FromCurrenciesToReportCurrencies(currenciesMoneymax)
+
+	reports.ReportCSV(reportPaths["MM"], reportCurrencies)
 
 	var resultExchange = CalculateConversion(currenciesMoneymax, &reqExchange.Exchange)
 

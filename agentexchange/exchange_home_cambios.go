@@ -1,6 +1,7 @@
 package interactions
 
 import (
+	reports "currency-exchange-medellin/reports"
 	scraping "currency-exchange-medellin/scraping"
 	utils "currency-exchange-medellin/utils"
 	"fmt"
@@ -37,6 +38,10 @@ func (reqExchange *ExchangeHomeCambios) selectExchange() ResultExchange {
 	scrapCurrenciesHomecambios(scraper, &currenciesHc)
 
 	scraper.Visit(reqExchange.Url)
+
+	reportCurrencies := FromCurrenciesToReportCurrencies(currenciesHc)
+
+	reports.ReportCSV(reportPaths["HC"], reportCurrencies)
 
 	var resultExchange = CalculateConversion(currenciesHc, &reqExchange.Exchange)
 

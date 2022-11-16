@@ -6,6 +6,16 @@ import (
 	"time"
 )
 
+const rootFolder = "reports/"
+
+var reportPaths = map[string]string{
+	"GC": rootFolder + "globocambios.csv",
+	"HC": rootFolder + "homecambios.csv",
+	"MM": rootFolder + "moneymax.csv",
+	"NF": rootFolder + "nutifinanzas.csv",
+	"UC": rootFolder + "unicambios.csv",
+}
+
 func mapToReportCurrency(currency Currency) reports.ReportCurrency {
 
 	valueOnSaleStr := fmt.Sprintf("%f", currency.ValueOnSale)

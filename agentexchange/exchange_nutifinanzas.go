@@ -1,6 +1,7 @@
 package interactions
 
 import (
+	reports "currency-exchange-medellin/reports"
 	scraping "currency-exchange-medellin/scraping"
 	"currency-exchange-medellin/utils"
 	"strings"
@@ -51,6 +52,10 @@ func (reqExchange *ExchangeNutifinanzas) selectExchange() ResultExchange {
 	scrapCurrenciesNutifinanzas(scraper, &currenciesNutifinanzas)
 
 	currenciesNutifinanzas = HomologateCurrencyDespByCode(currenciesNutifinanzas, currencyCodeNutiMap)
+
+	reportCurrencies := FromCurrenciesToReportCurrencies(currenciesNutifinanzas)
+
+	reports.ReportCSV(reportPaths["NF"], reportCurrencies)
 
 	var resultExchange = CalculateConversion(currenciesNutifinanzas, &reqExchange.Exchange)
 
