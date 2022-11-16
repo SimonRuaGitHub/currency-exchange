@@ -3,6 +3,7 @@ package main
 import (
 	agent "currency-exchange-medellin/agentexchange"
 	exchangemed "currency-exchange-medellin/exchangemed"
+	"currency-exchange-medellin/reports"
 	"fmt"
 	"sync"
 )
@@ -114,6 +115,9 @@ func main() {
 
 	fmt.Printf("Exchange house: %s:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
 		resultExchange.Name, resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
+
+	reportBestOffer := agent.MapToReportBestOffer(resultExchange)
+	reports.ReportCSVBestOffer(agent.ReportPaths["BESTOFFER"], reportBestOffer)
 }
 
 func bestPrice(resultExchanges []agent.ResultExchange) agent.ResultExchange {
