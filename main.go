@@ -3,6 +3,7 @@ package main
 import (
 	agent "currency-exchange-medellin/agentexchange"
 	exchangemed "currency-exchange-medellin/exchangemed"
+	notifier "currency-exchange-medellin/notification"
 	"currency-exchange-medellin/reports"
 	"fmt"
 	"sync"
@@ -113,11 +114,15 @@ func main() {
 
 	resultExchange := bestPrice(resultExchanges)
 
-	fmt.Printf("Exchange house: %s:\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
+	fullMsgToSend := fmt.Sprintf("Go buy/sell now!! \nExchange house: %s\nCurrency: %s\nOperation Type: %s\nValue Operation: %f\nValue Convertion: %f\n",
 		resultExchange.Name, resultExchange.Exchange.CurrencyCode, resultExchange.OperationType, resultExchange.Value, resultExchange.ValueConvertion)
+
+	fmt.Printf(fullMsgToSend)
 
 	reportBestOffer := agent.MapToReportBestOffer(resultExchange)
 	reports.ReportCSVBestOffer(agent.ReportPaths["BESTOFFER"], reportBestOffer)
+
+	notifier.SendNotification(fullMsgToSend, "+573177837733")
 }
 
 func bestPrice(resultExchanges []agent.ResultExchange) agent.ResultExchange {

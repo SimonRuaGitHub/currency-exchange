@@ -1,4 +1,4 @@
-package main
+package notification
 
 import (
 	"fmt"
@@ -7,18 +7,18 @@ import (
 	openapi "github.com/twilio/twilio-go/rest/api/v2010"
 )
 
-func main() {
+func SendNotification(message string, fullPhoneNum string) {
 	client := twilio.NewRestClient()
 
 	params := &openapi.CreateMessageParams{}
-	params.SetTo("whatsapp:+573105103968")
+	params.SetTo("whatsapp:" + fullPhoneNum)
 	params.SetFrom("whatsapp:+14155238886")
-	params.SetBody("Hello from Golang!")
+	params.SetBody(message)
 
 	_, err := client.Api.CreateMessage(params)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println("Te amo mucho mi amor - esto es lo que me falta programar!")
+		fmt.Println("Message was successfully sent!")
 	}
 }
